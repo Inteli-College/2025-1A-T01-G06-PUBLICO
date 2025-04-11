@@ -1,0 +1,35 @@
+# 📘 Sprint Summary – Module 1
+
+This summary covers the main results and activities carried out during the five sprints of Module 1, which focused on research, component selection, hardware prototyping, and initial firmware development for a digital audio device with IoT capabilities.
+
+---
+
+## 🟦 Sprint 1 (02/26 - 03/10)
+- Organization of project plan and delivery schedule.
+- Establishment of folder structure and start of documentation.
+- Initial definition of the scope and objectives of the device.
+
+## 🟨 Sprint 2 (03/11 - 03/24)
+- Bibliographic survey on audio circuits, ADCs/DACs, and digital interfaces.
+- Comparative study of different microcontrollers and converters.
+- Selection of key components based on cost, performance, and availability.
+
+## 🟥 Sprint 3 (03/25 - 04/07)
+- Assembly of the first prototype of the analog circuit on a breadboard.
+- Initial tests of gain, noise, and signal fidelity.
+- Start of firmware development for audio capture and transmission.
+
+## 🟩 Sprint 4 (04/08 - 04/21)
+- Integration of hardware blocks with firmware.
+- Functionality tests with analog inputs and digital output.
+- Audio transmission to mobile devices via digital interface.
+
+## 🟪 Sprint 5 (04/22 - 05/05)
+- Consolidated prototype with integrated circuits and firmware.
+- Tests with real instruments, DAWs, and MIDI devices.
+- Real-time functionality validation and collection of initial feedback.
+
+---
+
+## ✅ Conclusion
+The five sprints of this first module allowed for the construction of a solid foundation for the project. The team validated the key technical concepts, tested the initial signal flows, and established the path for the next phases, which will include graphical interface, presets, and IR plugin support.
