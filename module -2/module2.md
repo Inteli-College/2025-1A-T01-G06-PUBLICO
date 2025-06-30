@@ -110,4 +110,4 @@ The project goal was to create a compact, portable device capable of:
 
 **Module Completed by:** Gabriel Pascoli  
 **Institution:** Inteli  
-**Delivery Date:** June 30, 2025
+**Delivery Date:** June 28, 2025
