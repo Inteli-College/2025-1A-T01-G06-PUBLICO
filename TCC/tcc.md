@@ -24,9 +24,7 @@ Trabalho de Conclusão de Curso apresentado ao Inteli – Instituto de Tecnologi
 ## ✅ Folha de Aprovação  
 Trabalho aprovado em **__/__/2025**.  
 Banca Examinadora:  
-- Prof. Rafa matsumanha*  
-- Prof. ____________________  
-- Prof. ____________________  
+- Prof. Rafael matsuyanha*  
 
 ---
 
