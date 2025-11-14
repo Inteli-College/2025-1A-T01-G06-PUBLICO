@@ -1,20 +1,30 @@
-Dispositivo IoT para Processamento Digital de Áudio com ESP32 (Monograph)
 IoT Audio Processing Device Using ESP32
+Full Monograph — Markdown Version
 
 Author: Gabriel Pascoli Terezo
-Institution: Inteli — Institute of Technology and Leadership
+Institution: Inteli – Institute of Technology and Leadership
 Advisor: Prof. Rafael Matsuyama
 Year: 2025
 
 Abstract
 
-This monograph presents the development of an IoT-based digital audio processing device using the ESP32 microcontroller. The system operates as a compact audio interface capable of capturing musical signals—primarily electric guitars—applying digital effects, simulating amplifiers and speaker cabinets (Impulse Response / IR), and outputting processed audio in real time through a 7 W analog amplifier.
+This monograph presents the development of an IoT-based digital audio processing device using an ESP32 microcontroller. The system captures musical signals (especially electric guitar), processes them through embedded DSP (including EQ, distortion, and Impulse Response convolution), and outputs real-time audio via a 7 W analog amplifier.
 
-The proposed device integrates dedicated analog circuitry, high-fidelity ADC/DAC using the I²S protocol, embedded DSP implemented in C/C++, IoT connectivity, SD-card storage, and an optional mobile control application.
+The device integrates:
 
-This work details the electronic design, the signal chain, DSP algorithms, firmware architecture, system integration and practical validation with real instruments.
+an analog preamplifier,
 
-Keywords: Audio DSP, IoT, ESP32, Guitar Effects, IR Loader, I²S, Embedded Processing.
+high-fidelity ADC/DAC via I²S,
+
+ESP32 DSP in C/C++,
+
+SD-card storage for IR files,
+
+IoT connectivity,
+
+a class-D audio amplifier,
+
+an OLED interface + knobs and footswitch.
 
 Table of Contents
 
@@ -30,9 +40,9 @@ System Architecture
 
 Hardware Design
 
-Software & DSP Implementation
+DSP and Firmware
 
-Amplification and Analog Output
+Amplification
 
 Tests and Results
 
@@ -46,260 +56,229 @@ Annexes
 
 1. Introduction
 
-Advances in embedded systems have enabled compact devices to perform tasks previously restricted to dedicated computers. In the context of musical applications—especially electric guitar—there is increasing demand for portable digital processors capable of:
+Musicians increasingly rely on compact digital processors capable of real-time effects, amplifier modeling, IR simulation, and wireless control.
 
-real-time effects processing,
+This project develops an IoT-enabled digital audio processor, combining:
 
-amplifier simulation,
+analog guitar preamp
 
-cabinet simulation using IRs,
+high-resolution I²S ADC/DAC
 
-audio recording,
+real-time DSP
 
-wireless control, and
+IR convolution
 
-integration with mobile applications.
+SD-card storage
 
-The objective of this work is to design a complete IoT-enabled digital audio processor based on the ESP32 platform, incorporating:
+7 W amplifier
 
-analog guitar preamplification,
-
-high-fidelity I²S ADC and DAC,
-
-real-time DSP (EQ, distortion, IR convolution),
-
-SD storage for IR files and presets,
-
-a 7W class D amplifier,
-
-IoT remote control,
-
-user interface via OLED + potentiometers.
+IoT/mobile app support
 
 2. Literature Review
 
-The literature review included:
+Key areas studied:
 
-Digital audio processing fundamentals (Smith, Oppenheim, Cook).
+DSP and digital audio (Smith, Oppenheim, Zölzer)
 
-DSP algorithms for musical effects (Zölzer, DAFX).
+Guitar amplifier modeling and IR convolution
 
-I²S-capable microcontrollers (Espressif).
+Embedded DSP in microcontrollers
 
-IR convolution techniques for guitar cabinet emulation.
+I²S digital audio protocol
 
-Commercial DSP processors (HX Stomp, Mooer GE series, Zoom G series).
-
-IoT integration applied to audio devices (IEEE IoT research).
+IoT-enabled audio devices
 
 3. Theoretical Foundation
-3.1 Audio Capture and ADC
+3.1 Analog Audio and ADC
 
-Guitar signals are low-level and high-impedance. Therefore, the device requires:
+Guitar signals are low-level, high-impedance ⇒ require:
 
-high-impedance buffer stage,
+TL072 preamp
 
-analog gain stage,
+Buffering
 
-soft-clipping protection,
+Gain control
 
-an external ADC (PCM1802) due to poor ESP32 internal ADC quality.
+Soft-clipping
 
-3.2 I²S Digital Audio Protocol
+External ADC (PCM1802) for high SNR
 
-I²S is used for:
+3.2 I²S Communication
 
-low-latency audio transport,
+Used because it provides:
 
-synchronized clocking,
+16–32 bit audio
 
-16/24-bit sample transmission.
+Low latency
 
-The ESP32 supports full-duplex I²S, enabling simultaneous ADC input and DAC output.
+Synchronized bit clocks
 
-3.3 Digital Signal Processing (DSP)
+3.3 DSP Algorithms
 
-Effects implemented:
+Implemented processors include:
 
-Overdrive (nonlinear waveshaping)
+Waveshaping distortion
 
-3-band EQ (biquad filters)
+3-band EQ (Biquad filters)
 
 Delay
 
-Early-reflection reverb
+Reverb
 
-IR convolution for cabinet and amplifier modeling
+IR convolution (FFT-based)
 
-3.4 Impulse Response (IR) Convolution
+3.4 Impulse Responses (IRs)
 
-Real-time convolution is achieved using:
-
-FFT / iFFT
-
-partitioned convolution to reduce latency
-
-optimized buffers to fit ESP32 RAM limits
+IRs replicate guitar cabinet acoustics using convolution.
 
 4. Methodology
 
-The project followed a Scrum-based development cycle, distributed into 16 sprints:
+Project followed Scrum — 16 sprints:
 
-Sprints 1–3: Research, literature review, and feasibility analysis
-
-Sprints 4–7: Hardware prototyping
-
-Sprints 8–12: DSP firmware development
-
-Sprints 13–15: Testing and refinement
-
-Sprint 16: Integration with amplifier and IR loader
-
+Sprints	Focus
+1–3	Research & feasibility
+4–7	Hardware prototypes
+8–12	DSP firmware
+13–15	Tests & validation
+16	IR loader + amplifier integration
 5. System Architecture
+5.1 High-Level Architecture Diagram
 
-A high-level overview is shown below:
-
-Signal flow:
-
-Guitar input → analog preamp
-
-PCM1802 ADC → ESP32 (I²S)
-
-DSP: EQ, distortion, IR, mix
-
-PCM5102A DAC
-
-7W amplifier → speaker/headphones
+5.2 Audio Flow
+Guitar Input  
+    → TL072 Analog Preamp  
+        → PCM1802 ADC  
+            → ESP32 DSP  
+                → PCM5102 DAC  
+                    → 7 W Amplifier  
+                        → Speaker / Headphones
 
 6. Hardware Design
-
-The device consists of:
+6.1 Components
 
 ESP32-WROOM
 
-ADC PCM1802
+PCM1802 (ADC)
 
-DAC PCM5102A
+PCM5102A (DAC)
 
-7W Class-D Amplifier (PAM8403 or TPA3110)
+TL072 preamp
 
-TL072 Preamp
+PAM8403 / TPA3110 7W amplifier
 
-OLED Display (I²C)
+OLED 0.96”
 
-Potentiometers for tone/volume/effect control
+Potentiometers
 
-Footswitch for bypass
+Footswitch
 
-SD Card Storage
+SD card module
 
-USB-C Power
+USB-C power
 
-6.1 Signal Path Diagram
+6.2 Signal Path Diagram
 
-6.2 Complete Schematic
+6.3 Full Schematic
 
-6.3 Analog Circuit
+6.4 Analog Circuit
 
-7. Software & DSP Implementation
+7. DSP and Firmware
 7.1 Processing Pipeline
+I2S Input  
+  → Normalize  
+  → DSP Effects  
+  → IR Convolution  
+  → Mixer  
+  → I2S Output
 
-I²S audio input
-
-Normalization
-
-DSP effects
-
-Partitioned IR convolution
-
-Output mixer
-
-I²S DAC output
-
-7.2 I²S Read/Write Example
-
+7.2 I²S Audio Loop Example
 i2s_read(I2S_NUM_0, buffer, buffer_len, &bytes_read, portMAX_DELAY);
 process_audio(buffer);
 i2s_write(I2S_NUM_0, buffer, buffer_len, &bytes_written, portMAX_DELAY);
 
-y[n] = a0*x[n] + a1*x[n-1] + a2*x[n-2]
-      - b1*y[n-1] - b2*y[n-2];
-8. Amplification and Analog Output
+7.3 Biquad Filter Example
+y[n] = a0*x[n] 
+     + a1*x[n-1] 
+     + a2*x[n-2] 
+     - b1*y[n-1] 
+     - b2*y[n-2];
 
-A 7W Class D amplifier was chosen because:
+8. Amplification Stage
 
-High efficiency (>90%)
+A Class D 7W amplifier was selected due to:
 
-Clean operation at 5V
+high efficiency (>90%)
 
-Low heat dissipation
+low heat
 
-Sufficient output volume for practice and monitoring
+loud enough for practice
 
-Compatible with DAC output levels
+compatible with 5V supplies
 
 Supports:
 
-Guitar cabinets
+guitar cabinets
 
-Powered speakers
+powered speakers
 
-Headphones (with attenuation)
+headphones (with attenuation)
 
 9. Tests and Results
 9.1 Latency
-
-End-to-end latency (ADC → DSP → DAC): 10–14 ms
-Acceptable for real-time guitar performance.
-
+Stage	Time
+ADC → DSP → DAC	10–14 ms
+Wireless streaming	35 ms avg
 9.2 Audio Quality
-
-ADC/DAC SNR: >95 dB
-
-Low noise floor using TL072
-
-IR convolution significantly improved realism
-
+Metric	Result
+ADC/DAC SNR	95+ dB
+Noise	Very low (TL072 op-amp)
+IR convolution	High realism
 9.3 Power Consumption
-
-350–450 mA under full load
-
+Mode	Current
+Idle	310 mA
+DSP + Amp	350–450 mA
 10. Conclusion
 
-The system successfully functions as a portable guitar DSP processor using the ESP32, achieving real-time performance with high-quality effects and cabinet simulation. The combination of analog and digital components produced a reliable, low-cost, open-source alternative to commercial devices.
+The final prototype is a fully functional guitar DSP system capable of real-time effects, IR simulation, and IoT control.
+
+Its low cost and open-source design make it a viable educational and experimental platform.
 
 11. Future Work
 
-Full-featured mobile app
+Mobile app (Android/iOS)
 
-Advanced convolution reverbs
+Convolution reverb
 
-Pitch shifting / harmonizers
+Pitch shift/harmonizer
 
-BLE-MIDI integration
+BLE-MIDI
 
 Multitrack SD recording
 
-Internal rechargeable battery
+Rechargeable Li-ion battery
 
 12. References
 
 SMITH, Julius O. Digital Audio Processing. Stanford, 2011.
+
 OPPENHEIM, A.; SCHAFER, R. Discrete-Time Signal Processing. Prentice Hall, 2010.
+
 ESPRESSIF. ESP32 Technical Reference Manual. 2022.
+
 ZÖLZER, Udo. DAFX – Digital Audio Effects. Wiley, 2011.
-IEEE Xplore – IoT audio processing publications.
+
+IEEE Xplore — IoT audio processing papers.
 
 13. Annexes
 
-This section includes:
+Includes:
 
-All schematics
+Schematics
 
-PCB drafts
+Diagrams
 
-Test logs
+Test recordings
 
-Audio samples
+Firmware listings
 
-Additional circuit diagrams
+Hardware photos
