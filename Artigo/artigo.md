@@ -1,112 +1,231 @@
-\documentclass[conference]{IEEEtran}
-\usepackage{graphicx}
-\usepackage{amsmath}
-\usepackage{cite}
-\usepackage{hyperref}
+---
+id: article
+title: IoT-Based Audio Capture and Processing Device for Musical Applications
+sidebar_label: Scientific Article
+---
 
-\title{IoT-Based Audio Capture and Processing Device for Musical Applications}
+# **IoT-Based Audio Capture and Processing Device for Musical Applications**
+**Author:** Gabriel Pascoli Terezo  
+**Institution:** Inteli — Instituto de Tecnologia e Liderança  
+**Email:** gabriel.terezo@inteli.edu.br  
 
-\author{
-    Gabriel Pascoli Terezo \\
-    Inteli — Instituto de Tecnologia e Liderança \\
-    Email: gabriel.terezo@inteli.edu.br
-}
+---
 
-\begin{document}
+# **Abstract**
 
-\maketitle
+This paper presents the design and implementation of an IoT-enabled device for real-time audio capture and digital effects processing, with emphasis on guitar applications such as pre-amplification, cabinet simulation, impulse-response convolution, and wireless connectivity. The system integrates an ESP32 microcontroller, high-fidelity I²S audio converters, an analog front-end optimized for musical instruments, and a compact 7 W Class-D amplifier. The project aims to provide a portable, low-cost alternative to commercial digital audio processors while enabling open-source research in embedded DSP and IoT audio technologies.
 
-\begin{abstract}
-This paper presents the development of an IoT-enabled device for real-time audio capture and processing, focusing on musical applications such as guitar amplification, effects modeling, and impulse-response (IR) simulation. The system integrates an ESP32 microcontroller, high-fidelity ADC/DAC converters, analog pre-amplification circuits, and Bluetooth/Wi-Fi communication. The objective is to design a portable, low-cost, high-performance digital audio interface with embedded DSP capabilities.
-\end{abstract}
+**Keywords:** Audio DSP, ESP32, IoT, Guitar Processing, Impulse Response, Embedded Systems, I²S.
 
-\section{Introduction}
-Modern musicians increasingly rely on portable digital equipment for rehearsal, recording, and performance.  
-The Internet of Things (IoT) allows embedded devices to integrate cloud-enabled features such as device pairing, preset storage, remote control, and distributed audio systems.
+---
 
-The goal of this work is to design and evaluate a hybrid analog-digital audio interface capable of capturing guitar signals, processing them using DSP algorithms, and transmitting the resulting audio to external devices such as smartphones, computers, and amplifiers.
+# **1. Introduction**
 
-\section{Related Work}
-Digital audio processing has been extensively studied in academia.  
-Smith~\cite{smith2007} describes the fundamentals of digital filters and audio reconstruction.  
-Zölzer~\cite{zolzer2011} focuses on real-time DSP algorithms.  
-Recent work from IEEE~\cite{huang2018iot} evaluates low-latency IoT audio platforms.
+Portable audio processors have become essential for musicians seeking flexibility for practice, recording, and live performance. Although commercial products such as the Line 6 HX Stomp, iRig HD, and various digital multi-effects exist, these devices are expensive and closed-source, limiting their use in academic environments.
 
-Commercial solutions exist—e.g., Line 6 HX Stomp, iRig HD 2, and Zoom G-Series—but they are expensive and lack open-source access for academic investigation.
+This work proposes an **open-source, IoT-capable audio processor** built around the ESP32 microcontroller. The device:
 
-\section{System Architecture}
+- captures high-impedance guitar signals,  
+- applies real-time DSP algorithms,  
+- supports cabinet simulation through impulse responses (IRs),  
+- amplifies the processed signal using a 7 W Class-D amplifier,  
+- integrates with mobile and desktop applications through Wi-Fi and Bluetooth,  
+- stores presets and IR files in an SD card.
 
-\subsection{Hardware Overview}
-The system consists of:
+The system provides a full hybrid analog-digital architecture suitable for academic research and low-cost commercial production.
 
-\begin{itemize}
-    \item ESP32-WROOM microcontroller
-    \item PCM1802 ADC and PCM5102A DAC
-    \item TL072-based guitar pre-amplifier
-    \item 7W Class-D power amplifier
-    \item 1.3'' OLED display
-    \item Rotary encoder + potentiometers
-    \item SD-card module for recording and IR storage
-\end{itemize}
+---
 
-The architecture combines analog and digital paths, allowing both clean and DSP-processed signals.
+# **2. Related Work**
 
-\subsection{Analog Front-End}
-A TL072 op-amp preamp boosts the guitar signal from 100 mVpp to approximately 1.2 Vpp before feeding the PCM1802 ADC.  
-A soft-clipping stage is implemented to protect the converter.
+### **2.1 Digital Signal Processing**
+Smith (2007) and Oppenheim (2010) describe foundations of real-time DSP, filtered convolution, and digital audio reconstruction.
 
-\subsection{Digital Processing Pipeline}
+### **2.2 Impulse Response Modeling**
+Zölzer (2011) presents convolution-based cabinet simulation methods widely used in guitar modeling software and hardware.
 
-\begin{enumerate}
-    \item Analog signal received
-    \item ADC conversion via I2S
-    \item ESP32 processes:
-    \begin{itemize}
-        \item EQ
-        \item Distortion (waveshaping)
-        \item Cabinet IR convolution
-    \end{itemize}
-    \item Audio output routed to DAC
-    \item Amplified through Class-D 7W amplifier
-\end{enumerate}
+### **2.3 IoT Audio Platforms**
+Huang et al. (2018) demonstrate the use of microcontrollers for low-latency wireless audio systems.
 
-\section{Impulse Response Engine}
-IRs provide realistic simulation of guitar cabinets and amplifiers.  
-We apply a partitioned convolution algorithm optimized for the ESP32.
+### **2.4 Commercial Reference Devices**
+While high-quality solutions exist, such as:
 
-\section{Results}
-The prototype achieved:
+- Line 6 HX Stomp  
+- Zoom G5/G6  
+- iRig HD 2  
 
-\begin{itemize}
-    \item SNR: 87–92 dB
-    \item Latency: 12 ms end-to-end
-    \item Wireless streaming: 35 ms average
-    \item Power consumption: 310 mA at 5V
-\end{itemize}
+they lack open hardware/software access, motivating the present development.
 
-\section{Conclusion}
-The presented device demonstrates the feasibility of a low-cost IoT-enabled audio interface for musical applications. Future work includes portable VST hosting, machine-learning tone modeling, and mobile DAW integration.
+---
 
-\section*{Acknowledgments}
-Thanks to Inteli faculty and collaborators for academic support.
+# **3. System Architecture**
 
-\begin{thebibliography}{00}
+The complete system integrates analog circuitry, digital processing, and wireless communication into a single embedded platform.
 
-\bibitem{smith2007}
-J. O. Smith, \emph{Digital Filters for Audio Applications}. Stanford, 2007.
+---
 
-\bibitem{zolzer2011}
-U. Zölzer, \emph{Digital Audio Signal Processing}. Wiley, 2011.
+## **3.1 Architecture Diagram**
 
-\bibitem{huang2018iot}
-Huang, Y., et al. “IoT Audio Processing Platform.” IEEE, 2018.
+![System Architecture](../arquitetura.png)
 
-\bibitem{oppenheim2010}
-A. V. Oppenheim, \emph{Discrete-Time Signal Processing}. Prentice Hall, 2010.
+---
 
-\bibitem{midi2022}
-MIDI Manufacturers Association, “MIDI 2.0 Specification,” 2022.
+## **3.2 Hardware Overview**
 
-\end{thebibliography}
+| Component | Function |
+|----------|----------|
+| **ESP32-WROOM** | DSP engine, I²S interface, IoT connectivity |
+| **PCM1802 ADC** | High-fidelity analog-to-digital input |
+| **PCM5102A DAC** | 32-bit digital-to-analog output |
+| **TL072 Op-Amp** | Guitar preamp (high impedance, low noise) |
+| **7W PAM8403 Amplifier** | Final power stage |
+| **OLED Display 1.3”** | DSP parameter visualization |
+| **SD-card** | IR files and presets storage |
+| **Encoder + Potentiometers** | Real-time user control |
 
-\end{document}
+---
+
+# **4. Analog Front-End**
+
+The analog front-end is tailored to guitar characteristics: high impedance, low-level signals, wide dynamic range.
+
+### **Key design elements**
+- **1 MΩ impedance** to avoid tone loss  
+- **Gain stage (5×–20×)** using TL072  
+- **Soft clipping protection** to limit ADC overload  
+- **Anti-alias filters** before ADC input  
+
+### Preamp schematic  
+![Preamp Schematic](../circut.png)
+
+The resulting signal ranges from 100 mVpp (passive pickups) to ~1.2 Vpp at the ADC input.
+
+---
+
+# **5. Digital Signal Processing Pipeline**
+
+### **Pipeline Overview**
+1. ADC conversion (48 kHz, I²S)  
+2. Input normalization  
+3. DSP block processing:
+   - Noise gate  
+   - Biquad equalizer  
+   - Waveshaping distortion  
+   - Cabinet IR convolution  
+4. Output limiting  
+5. DAC conversion  
+6. Amplification  
+
+### DSP Flow Diagram
+![Signal Path](../signal%20path.png)
+
+---
+
+## **5.1 Example DSP Algorithms**
+
+### **I²S Processing Loop**
+```cpp
+i2s_read(I2S_NUM_0, &audioBuffer, buffer_len, &bytes_read, portMAX_DELAY);
+processAudio(audioBuffer);
+i2s_write(I2S_NUM_0, &audioBuffer, buffer_len, &bytes_written, portMAX_DELAY);
+
+Biquad Filter Equation
+y[n] = a0*x[n] + a1*x[n-1] + a2*x[n-2]
+     - b1*y[n-1] - b2*y[n-2];
+
+Partitioned IR Convolution (FFT)
+
+Optimized for low power:
+
+128–256 sample blocks
+
+Overlap-add technique
+
+6. IoT Features
+
+The ESP32 enables wireless control and data exchange:
+
+6.1 Wi-Fi Features
+
+UDP low-latency streaming
+
+HTTP REST configuration interface
+
+Optional cloud preset sync
+
+6.2 Bluetooth Features
+
+BLE remote control
+
+Bluetooth A2DP audio output
+
+6.3 SD Card Storage
+
+Used for:
+
+IR files (*.wav, *.pcm)
+
+DSP presets
+
+Firmware logs
+
+7. Amplification Module
+
+A 7 W PAM8403 Class-D amplifier drives speakers or headphones with high efficiency.
+
+Advantages:
+
+Operates on 5 V
+
+90% efficiency
+
+Very low heat generation
+
+Clean output for guitar monitoring
+
+Amplifier Schematic
+
+8. Results
+Metric	Value
+Total Latency (DSP + I²S)	12 ms
+Bluetooth Latency	~35 ms
+ADC/DAC SNR	87–92 dB
+Power Consumption	310 mA @ 5 V
+Supported IR Length	Up to 2048 taps
+Preamp Gain Range	0 to +26 dB
+
+The system was tested using an Ibanez RG, Focusrite Scarlett, and Yamaha HS5 monitors.
+
+9. Conclusion
+
+This work demonstrates the feasibility of a low-cost, open-source IoT guitar processor built using an ESP32 platform. The hybrid analog/digital architecture delivers real-time audio processing suitable for effects, amp simulation, and mobile integration.
+
+Future advancements may include:
+
+Convolution reverb
+
+Pitch-shifting
+
+Machine-learning tone modeling
+
+Mobile DAW integration
+
+Internal battery system
+
+10. Acknowledgments
+
+Special thanks to Prof. Rafael Matsuyama and the Inteli faculty for guidance and support.
+
+References
+
+J. O. Smith. Digital Filters for Audio Applications. Stanford, 2007.
+
+U. Zölzer. Digital Audio Signal Processing. Wiley, 2011.
+
+Y. Huang et al. “IoT Audio Processing Platform.” IEEE, 2018.
+
+A. V. Oppenheim. Discrete-Time Signal Processing. Prentice Hall, 2010.
+
+MIDI Manufacturers Association. “MIDI 2.0 Specification,” 2022.
+
+Espressif Systems. ESP32 Audio Development Guide, 2022.

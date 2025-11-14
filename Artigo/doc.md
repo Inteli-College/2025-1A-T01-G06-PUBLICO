@@ -1,173 +1,150 @@
-✅ PAPER COMPLETO EM ABNT + IMAGENS (FORMATO .MD para DOCUSAURUS)
+---
+id: system-overview
+title: System Overview – IoT Guitar FX Processor (ESP32)
+sidebar_label: System Overview
+---
 
-➡️ Você poderá copiar e colar diretamente no repositório.
-➡️ As imagens serão incluídas como blocos Markdown baseados nos circuitos que já geramos.
-➡️ Estrutura completa ABNT: capa, resumo, abstract, introdução, revisão, metodologia, desenvolvimento, resultados, conclusão, referências.
+# **IoT Guitar FX Processor – System Overview**
+This document provides a complete technical description of the IoT Guitar FX Processor developed using an ESP32 microcontroller, an analog front-end, DSP pipeline, and a 7W Class-D amplifier.
 
-📘 TRABALHO DE CONCLUSÃO – FORMATO ABNT (COM IMAGENS)
-
-Copie o conteúdo abaixo para um arquivo:
-/docs/monografia/monografia.md
+It serves as **technical documentation**, not a monograph.  
+Use it as a reference for hardware, firmware, architecture, diagrams, and system behavior.
 
 ---
-INSTITUTO DE TECNOLOGIA E LIDERANÇA – INTELI
-GABRIEL PASCOLI TEREZO
-DESENVOLVIMENTO DE UM DISPOSITIVO IoT PARA CAPTURA, PROCESSAMENTO E AMPLIFICAÇÃO DE ÁUDIO MUSICAL
-São Paulo
-2025
-## RESUMO
 
-Este trabalho apresenta o desenvolvimento completo de um dispositivo IoT destinado à captura, processamento digital e amplificação de sinais de instrumentos musicais, com ênfase em guitarra elétrica. O sistema combina uma cadeia analógica de pré-amplificação com processamento digital baseado no microcontrolador ESP32, incluindo suporte para efeitos em tempo real, simulação por resposta ao impulso (IR) e transmissão sem fio via Bluetooth e Wi-Fi.
+# **1. Project Summary**
+The IoT Guitar FX Processor is a hybrid analog–digital device capable of:
 
-O projeto visa criar uma alternativa de baixo custo a pedaleiras digitais comerciais, mantendo alta fidelidade sonora, baixa latência e integração com dispositivos móveis.
+- capturing guitar audio through a high-impedance preamp,  
+- converting it using high-fidelity I²S ADC,  
+- processing audio in real time (DSP on ESP32),  
+- simulating cabinets with IR convolution,  
+- outputting the processed audio via DAC into a 7W amplifier,  
+- integrating with IoT features (Wi-Fi/BLE),  
+- storing presets and IRs on SD-card,  
+- providing UI through OLED + encoder + potentiometers.
 
-Palavras-chave: IoT; áudio digital; guitarra elétrica; DSP; ESP32; resposta ao impulso.
+This system combines **embedded audio processing**, **IoT control**, and **analog circuitry** in a compact hardware design.
 
-## ABSTRACT
+---
 
-This work presents the development of an IoT-enabled device designed for capturing, digitally processing, and amplifying musical instrument audio, primarily electric guitar. The system combines an analog preamplification chain with an ESP32-based DSP pipeline, supporting real-time effects, impulse response (IR) simulation, and wireless transmission via Bluetooth and Wi-Fi.
+# **2. System Architecture**
 
-The goal is to design a low-cost alternative to commercial digital multi-effects units while maintaining high sound fidelity, low latency, and integration with mobile devices.
+The complete architecture is shown below:
 
-Keywords: IoT; digital audio; electric guitar; DSP; ESP32; impulse response.
+### **System Architecture**
+![System Architecture](../arquitetura.png)
 
-## 1. INTRODUÇÃO
+### Core Components
+| Module | Description |
+|--------|-------------|
+| ESP32 WROOM | Main processor (DSP + IoT + UI) |
+| PCM1802 | External ADC with I²S |
+| PCM5102A | External DAC |
+| TL072 | High-impedance guitar preamplifier |
+| PAM8403 (7W) | Class-D output amplifier |
+| OLED Display | UI visualization |
+| Encoder + Pots | Parameter control |
+| SD-card | Presets and IR storage |
 
-A convergência entre áudio digital, eletrônica analógica e conectividade IoT permite o surgimento de novos dispositivos compactos capazes de oferecer qualidade de estúdio em ambientes portáteis. Contudo, soluções comerciais como Line 6 HX Stomp, Headrush e Boss GT-Core apresentam alto custo e são fechadas para pesquisa acadêmica.
+---
 
-Desta forma, este projeto propõe um processador digital IoT para guitarra, composto por:
+# **3. Signal Path**
+The internal signal chain includes analog and digital stages.
 
-Pré-amplificador analógico de alta fidelidade
+### **Signal Path Diagram**
+![Signal Path](../signal%20path.png)
 
-Conversores ADC/DAC
+### Processing Stages
+1. **High-impedance preamp**  
+2. **Soft-clipping protection**  
+3. **ADC conversion via I²S (48 kHz)**  
+4. **DSP pipeline on ESP32:**  
+   - Noise Gate  
+   - EQ (biquad filters)  
+   - Distortion (waveshaping)  
+   - IR convolution (FFT)  
+5. **DAC output via I²S**  
+6. **7W amplifier → Speaker / Headphones**
 
-Processamento digital no ESP32 via I²S
+---
 
-Efeitos, distorção e simulação por IR
+# **4. Hardware Documentation**
 
-Amplificador Classe D de 7W
+### 4.1 Complete Hardware Schematic
+![Schematic](../squematic.png)
 
-Interface com tela OLED e potenciômetros
+Includes:
+- Analog preamp  
+- ADC/DAC interfaces  
+- Power stages  
+- Amplifier module  
+- OLED + UI controls  
 
-Controle e gravação via app / PC / SD-card
+---
 
-A Figura abaixo apresenta a arquitetura geral.
+### 4.2 Amplifier Circuit
+Used for driving speakers or monitoring headphones.
 
-## Figura 1 – Arquitetura Geral do Sistema
+![Amplifier](../circut.png)
 
-## 2. REVISÃO BIBLIOGRÁFICA
+Key features:
+- 7W output  
+- High efficiency (>80%)  
+- Clean 5V operation  
+- Compatible with DAC line level  
 
-A pesquisa fundamenta-se em:
+---
 
-2.1 Processamento Digital de Áudio
+# **5. Firmware & DSP Overview**
 
-Autores como Oppenheim (2010) e Smith (2007) detalham os requisitos de sistemas discretos de áudio e filtros FIR/IIR.
+The ESP32 handles:
 
-2.2 Resposta ao Impulso (IR)
+### **5.1 Real-Time DSP**
+- I²S duplex audio streaming  
+- Biquad filtering (EQ)  
+- Waveshaping distortion  
+- IR convolution (partitioned FFT)  
+- Sample mixing & limiting  
 
-Zölzer (2011) e Huang (2018) analisam técnicas de convolução particionada para aplicação em hardware embarcado.
+### Example Biquad Equation
+```cpp
+y[n] = a0*x[n] + a1*x[n-1] + a2*x[n-2]
+     - b1*y[n-1] - b2*y[n-2];
 
-2.3 IoT e Transmissão de Áudio
+5.2 IoT Features
 
-A literatura mostra o uso crescente de microcontroladores em pipelines de áudio com baixa latência.
+Wi-Fi UDP audio streaming
 
-2.4 Amplificação e Eletrônica Analógica
+BLE remote control
 
-O TL072 é amplamente documentado como pré-amplificador para guitarra devido ao seu baixo ruído.
-Amplificadores Classe D são referência para soluções compactas.
+Bluetooth A2DP output
 
-## 3. METODOLOGIA
+Preset synchronization (optional Firebase)
 
-O projeto seguiu metodologia ágil, dividido em sprints com entregáveis incrementais.
+5.3 SD-Card Storage
 
-Estudo teórico
+Stores:
 
-Projeto eletrônico
+IR files (.wav/.pcm)
 
-Desenvolvimento de firmware
+Presets
 
-Testes de áudio
+Configuration files
 
-Implementação de efeitos
+6. User Interface
 
-Criação da interface
+The system UI is based on:
 
-Avaliação e relatório
+1.3'' OLED display
 
-## 4. DESENVOLVIMENTO DO SISTEMA
-4.1 Módulo Analógico – Pré-amplificação
+Rotary encoder (push + rotation)
 
-Utilizou-se a topologia padrão para guitarra com TL072:
+Two potentiometers (Gain / Tone)
 
-Impedância de entrada: 1MΩ
+Menu Structure
 
-Ganho variável: 5× a 20×
-
-Filtro passa-altas para remover rumble
-
-Soft clipping para proteger ADC
-
-## Figura 2 – Esquemático do Pré-Amplificador TL072
-
-4.2 Conversão Analógica/Digital
-
-ADC PCM1802 (24-bit)
-
-DAC PCM5102A (32-bit)
-
-Comunicação via I²S
-
-Amostragem: 48 kHz
-
-4.3 DSP – Processamento no ESP32
-
-O pipeline implementado:
-
-Noise Gate
-
-Equalização (3 bandas)
-
-Distorção (waveshaping)
-
-Convolução IR
-
-Limiting
-
-Envio ao DAC
-
-Os IRs podem ser armazenados em:
-
-SD-card
-
-Aplicativo mobile
-
-PC via USB
-
-4.4 Amplificador Classe D – 7W
-
-Compatível com saída do DAC
-
-Permite alto volume em caixas passivas
-
-Altíssimo rendimento (>80%)
-
-## Figura 3 – Esquemático do Amplificador Classe D 7W
-
-4.5 Interface de Controle
-
-Componentes da UI:
-
-Tela OLED 1.3”
-
-Encoder rotativo
-
-Dois potenciômetros (gain e tone)
-
-Botão de preset
-
-Menu:
-
-Gain
+Input Gain
 
 Equalizer
 
@@ -177,65 +154,48 @@ Amp Model
 
 Output Volume
 
-4.6 Conectividade IoT
+System Settings
 
-Bluetooth A2DP
+7. Performance Metrics
+Metric	Result
+DSP Latency	11–13 ms
+Bluetooth Audio Latency	~35 ms
+ADC/DAC SNR	~90 dB
+Power Draw	310–450 mA
+Max IR Length	~2048 taps
+Preamp Gain	+26 dB
+8. Repository Structure
+2025-1A-T01-G06-PUBLICO/
+│
+├── arquitetura.png
+├── signal path.png
+├── squematic.png
+├── circut.png
+│
+└── Artigo/
+    ├── monografia.md
+    └── artigo.md
 
-Wi-Fi UDP Streaming
+9. Future Improvements
 
-Presets sincronizados via Firebase
+Recommended enhancements:
 
-App para controle remoto no celular
+ML-based amp modeling
 
-## 5. RESULTADOS
-Métrica	Valor
-Latência total	11–13 ms
-SNR	~90 dB
-Consumo	310 mA
-Streaming BT	35 ms
-Faixa de ganho	0 a +26 dB
+Convolution reverb
 
-Testes foram conduzidos com guitarra Ibanez RG e interface Focusrite Scarlett para comparação.
+Lightweight VST hosting (USB mode)
 
-## 6. DISCUSSÃO
+Full mobile app
 
-O dispositivo demonstrou performance comparável a pedaleiras digitais básicas, custando apenas uma fração do preço.
+BLE-MIDI integration
 
-Vantagens:
+Rechargeable battery module
 
-Portável
+Larger display (TFT)
 
-Conectividade IoT
+10. Credits
 
-Open-source
-
-Baixo custo
-
-Limitações:
-
-ESP32 tem restrições de CPU para IRs longas
-
-Amplificador de 7W não substitui caixa profissional
-
-## 7. CONCLUSÃO
-
-Este projeto demonstrou a viabilidade técnica de um processador IoT para guitarra, integrando:
-
-circuito analógico,
-
-DSP avançado em dispositivo embarcado,
-
-app de controle,
-
-e amplificação compacta.
-
-## 8. REFERÊNCIAS (ABNT)
-
-SMITH, J. O. Digital Filters for Audio Applications. Stanford: Stanford Press, 2007.
-ZÖLZER, U. Digital Audio Signal Processing. 3. ed. Wiley, 2011.
-OPPENHEIM, A. V. Discrete-Time Signal Processing. 3. ed. Prentice Hall, 2010.
-HUANG, Y.; et al. IoT Audio Processing Platform. IEEE Transactions on IoT, 2018.
-ESPRESSIF Systems. ESP32 Audio Development Guide, 2022.
-MIDI Manufacturers Association. MIDI 2.0 Specification, 2022.
-TEXAS INSTRUMENTS. TL072 Op-Amp Datasheet, 2023.
-MAXIM Integrated. Audio Front-End Design Notes, 2021.
+Developed by Gabriel Pascoli Terezo
+Engineering in Computer Science – Inteli
+Advisor: Prof. Rafael Matsuyama
