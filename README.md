@@ -1,71 +1,178 @@
-# 🎸 IoT Guitar FX – ESP32 + DSP + Amplificador 7W
+🎸 IoT Guitar FX – ESP32 + DSP + 7W Amplifier
+Sistema IoT para Processamento Digital de Áudio com ESP32
+IoT Audio Processing System for Guitar Effects using ESP32
+🌎 Languages / Idiomas
 
-Este repositório contém o desenvolvimento completo do sistema IoT para processamento de efeitos de guitarra utilizando ESP32, interface I²S, DSP, armazenamento local e amplificador analógico integrado.
+🇧🇷 Leia em Português
 
----
+🇺🇸 Read in English
 
-## 📚 Documentação Completa
+🇧🇷 VERSÃO EM PORTUGUÊS
+🎸 IoT Guitar FX – ESP32 + DSP + Amplificador 7W
 
-### **📄 Monografia (ABNT 2023)**
-👉 [Abrir monografia](./Artigo/monografia.md)
+Este projeto apresenta um dispositivo IoT para processamento digital de efeitos de guitarra, combinando hardware analógico, DSP em tempo real, interface I²S, IRs, conectividade e amplificador integrado.
 
-### **📝 Artigo Científico**
-👉 [Abrir artigo](./Artigo/artigo.md)
+📽 Apresentação Oficial
 
----
+🔗 Canva Presentation:
+https://www.canva.com/design/DAG4sYYO-wU/y5F-14GGp2GgDcIg7vRv0g/edit
 
-## 🖼 Diagramas e Esquemáticos
+📚 Documentação Completa
+📘 Monografia (ABNT 2023)
 
-| Arquivo | Descrição |
-|--------|-----------|
-| [arquitetura.png](./arquitetura.png) | Arquitetura geral do sistema |
-| [signal path.png](./signal%20path.png) | Pipeline DSP do áudio |
-| [squematic.png](./squematic.png) | Esquemático completo |
-| [circut.png](./circut.png) | Circuito do amplificador |
+👉 Abrir monografia
 
----
+📄 Artigo Científico (IEEE)
 
-## 🚀 Tecnologias principais
+👉 Abrir artigo
 
-- ESP32 WROOM  
-- Codec I²S (ADC + DAC)  
-- DSP em C/C++  
-- Wi-Fi / Bluetooth  
-- Amplificador analógico de 7W  
-- Controle via WebApp + tela OLED  
+🖼 Diagramas e Esquemáticos
+Arquivo	Descrição
+arquitetura.png
+	Arquitetura geral do sistema
+signal path.png
+	Pipeline DSP
+squematic.png
+	Esquemático eletrônico
+circut.png
+	Circuito do amplificador 7W
+💰 Tabela de Preços dos Componentes (Estimativa)
+Componente	Quantidade	Preço (R$)	Total
+ESP32 WROOM	1	R$ 35,00	R$ 35,00
+ADC PCM1802	1	R$ 45,00	R$ 45,00
+DAC PCM5102A	1	R$ 40,00	R$ 40,00
+Amplificador 7W (PAM8407/TPA3110)	1	R$ 25,00	R$ 25,00
+TL072 (Op-Amp)	1	R$ 7,00	R$ 7,00
+OLED 1.3"	1	R$ 28,00	R$ 28,00
+Encoder Rotativo	1	R$ 12,00	R$ 12,00
+Potenciômetros	3	R$ 5,00	R$ 15,00
+Cartão SD + módulo	1	R$ 22,00	R$ 22,00
+Placa PCB (10x10 cm)	1	R$ 50,00	R$ 50,00
+Conectores P10 / P2	2	R$ 8,00	R$ 16,00
+Fonte 5V 2A	1	R$ 30,00	R$ 30,00
+Caixa / Case	1	R$ 40,00	R$ 40,00
+💵 Custo Total Estimado: R$ 365 – R$ 420
+🎯 Objetivos do Projeto
 
----
+Processar efeitos de guitarra em tempo real
 
-## 📦 Estrutura do repositório
+Simular amplificadores/válvulas e gabinetes (IRs)
 
-2025-1A-T01-G06-PUBLICO/
-│
-├── arquitetura.png
-├── signal path.png
-├── squematic.png
-├── circut.png
-│
-└── Artigo/
-├── monografia.md
-└── artigo.md
+Oferecer interface IoT (controle por app/PC)
 
+Possibilidade de gravação em SD Card
 
----
+Saída amplificada para caixas ativas ou fone
 
-## 🎯 Objetivo do Projeto
+🎚 Tecnologias
+Hardware
 
-Desenvolver um pedal multiefeitos + amplificador inteligente, capaz de:
+ESP32
 
-- Processar efeitos DSP em tempo real  
-- Simular amplificadores (IRs)  
-- Salvar presets em SD Card  
-- Ser controlado via smartphone ou PC  
-- Tocar em caixas ativas ou saída de fone  
+I²S ADC/DAC
 
----
+TL072 preamp
 
-## ✨ Autoria
-Projeto desenvolvido por **Gabriel Pascoli**, Engenharia da Computação.
+Amplificador Classe D
 
----
+Display OLED
 
+Software
+
+DSP em C/C++
+
+FFT + Convolução IR
+
+EQ, distorção, modulação
+
+Wi-Fi + Bluetooth
+
+✨ Autoria
+
+Gabriel Pascoli Terezo – Engenharia da Computação
+Orientador: Prof. Rafael Matsuyama – INTELI
+
+🇺🇸 ENGLISH VERSION
+🎸 IoT Guitar FX – ESP32 + DSP + 7W Amplifier
+
+This project introduces an IoT-enabled guitar effects processor with real-time DSP, analog front-end, IR convolution, I²S audio pipeline, SD storage, and integrated power amplifier.
+
+📽 Presentation
+
+🔗 Official Canva Presentation:
+https://www.canva.com/design/DAG4sYYO-wU/y5F-14GGp2GgDcIg7vRv0g/edit
+
+📚 Documentation
+📘 Thesis (ABNT 2023 in PT-BR)
+
+👉 Open monograph
+
+📄 Scientific Article (IEEE)
+
+👉 Open article
+
+🖼 System Diagrams
+File	Description
+arquitetura.png
+	Full architecture
+signal path.png
+	DSP pipeline
+squematic.png
+	Electronic schematic
+circut.png
+	Power amplifier
+💰 Component Price Table (USD Approx.)
+Component	Qty	Price (USD)	Total
+ESP32 WROOM	1	$7	$7
+ADC PCM1802	1	$9	$9
+DAC PCM5102A	1	$8	$8
+7W Amplifier (PAM8407/TPA3110)	1	$5	$5
+TL072 Op-Amp	1	$2	$2
+OLED 1.3"	1	$6	$6
+Rotary Encoder	1	$3	$3
+Potentiometers	3	$1	$3
+SD Card Module	1	$5	$5
+PCB (10×10 cm)	1	$15	$15
+Audio Connectors	2	$2	$4
+Power Supply 5V	1	$6	$6
+Enclosure	1	$12	$12
+Total Estimated Cost: $85 – $95
+🎯 Project Goals
+
+Real-time DSP guitar effects
+
+Cabinet/amp IR simulation
+
+IoT remote control (WebApp/PC/phone)
+
+SD Card recording & IR storage
+
+Built-in audio amplification
+
+🧠 Technologies
+Hardware
+
+ESP32
+
+I²S audio codec
+
+TL072 preamp
+
+Class D amplifier
+
+OLED display
+
+Software
+
+DSP in C/C++
+
+FFT + Partitioned Convolution
+
+EQ, distortion, modulation
+
+Wi-Fi / Bluetooth
+
+✨ Author
+
+Gabriel Pascoli Terezo – Computer Engineering
+Advisor: Prof. Rafael Matsuyama – INTELI
