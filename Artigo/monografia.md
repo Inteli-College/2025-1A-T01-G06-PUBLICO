@@ -173,7 +173,6 @@ Used for:
 ![Amplifier](../circut.png)
 
 ---
-
 # **6. Software & DSP Implementation**
 
 ## 6.1 Processing Pipeline
@@ -194,20 +193,25 @@ Used for:
 ## 6.2 Example: Biquad Filter
 
 ```cpp
-y[n] = a0*x[n] + a1*x[n-1] + a2*x[n-2]
-     - b1*y[n-1] - b2*y[n-2];
-
+// Biquad filter (Direct Form I)
+y[n] = a0 * x[n]
+     + a1 * x[n-1]
+     + a2 * x[n-2]
+     - b1 * y[n-1]
+     - b2 * y[n-2];
 6.3 IR Convolution (FFT)
-
 Uses:
 
 Partitioned convolution
 
-Overlap-add
+Overlap-add method
 
-128–256 sample blocks (ESP32 optimized)
+Blocks of 128–256 samples (optimized for ESP32)
 
-IRs loaded from SD-card.
+IRs loaded from SD-card in WAV/PCM format
+
+Notes:
+Partitioning shortens latency and reduces the CPU load, allowing real-time cabinet simulation on the ESP32.
 
 7. IoT Features
 
